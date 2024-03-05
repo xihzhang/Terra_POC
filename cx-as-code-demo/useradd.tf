@@ -1,6 +1,6 @@
 resource "genesyscloud_user" "example_user" {
-  email           = "Terra1@example.com"
-  name            = "TerraPOCTest"
+  email           = "Terra2@example.com"
+  name            = "TerraPOCTest2"
   password        = "Initial-Password123!"
   #division_id     = genesyscloud_auth_division.home.id
   state           = "active"
