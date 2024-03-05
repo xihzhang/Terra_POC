@@ -4,7 +4,7 @@
 #
 #  It should be noted that in our example here we are using Terraform cloud as a back end with individual
 #  workspaces for each environment. This is set in the Terraform script that is being executed
-#  (e.g.  $GITHUB_WORKSPACE/blueprint/genesys-cloud-cx-as-code).
+#  (e.g.  $GITHUB_WORKSPACE/cx-as-code-demo).
 #
 ###
 name: "Invoke Terraform with Auto Apply"
