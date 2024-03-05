@@ -1,53 +1,26 @@
-
-
 terraform {
-
-  backend "remote" {
-    organization = "thoughtmechanix"
+  cloud {
+    organization = "Terra-POC-2"
 
     workspaces {
-      prefix = "genesys_email_"
+      name = "Terra-POC-2"
     }
   }
+}
 
+terraform {
+  required_version = ">= 1.0.0"
   required_providers {
     genesyscloud = {
-      source = "mypurecloud/genesyscloud"
+      source  = "mypurecloud/genesyscloud",
+      version = ">= 1.6.0"
     }
   }
 }
 
 provider "genesyscloud" {
-  sdk_debug = true
+  oauthclient_id     = "714e316b-6fcb-4a16-8837-ce4a011eaa90"
+  oauthclient_secret = "RtoCo9EClcozcgukm5m3R6sjUJRvr176slgRaQb8vM8"
+  aws_region         = "us-west-2"
 }
 
-module "classifier_users" {
-  source = "./modules/users"
-}
-
-#This is an example of creating queues using a remote modules.  Remote modules allow you to re-use Terraform/CX as Code component across multiple Terraform
-#configs.
-
-# module "classifier_queues" {
-#   source                   = "git::https://github.com/GenesysCloudDevOps/genesys-cloud-queues-demo.git?ref=main"
-#   classifier_queue_names   = ["401K", "IRA", "529", "GeneralSupport"]
-#   classifier_queue_members = module.classifier_users.user_ids
-# }
-
-module "classifier_queues" {
-  source                   = "./modules/queues"
-  classifier_queue_names   = ["401K", "IRA", "ROTH", "529", "GeneralSupport", "PremiumSupport","PremiumSupport2"]
-  classifier_queue_members = module.classifier_users.user_ids
-}
-
-
-module "classifier_email_routes" {
-  source               = "./modules/email_routes"
-  genesys_email_domain = var.genesys_email_domain
-}
-
-module "classifier_data_actions" {
-  source             = "./modules/data_actions"
-  classifier_url     = var.classifier_url
-  classifier_api_key = var.classifier_api_key
-}
