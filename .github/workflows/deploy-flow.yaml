@@ -1,0 +1,40 @@
+
+name: Genesys Cloud CICD Demo
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  ###
+  #  job: deploy-user-dev
+  #
+  #  The deploy-email-flow-dev job starts by first setting all of the environment variables specific to the development environment. Secret values
+  #  are pulled directly from the GitHub Actions secrets vaults. Otherwise, all environment variables are set directly in the script.
+  #  Once all of the environment variables are set the following steps are taken:
+  #
+  #  Step 1 (actions/checkout@v2): Uses a remote action to checkout all of the source code.
+  #  Step 2 (./.github/actions/genesys-cloud-dev-tools): Uses a local action to install the Genesys Cloud Python SDK and the Archy tools
+  #  Step 3 (hashicorp/setup-terraform@v1): Uses a remote action to install Terraform and configure the Terraform token
+  #  Step 4 (./.github/actions/genesys-cloud-apply-terraform): Uses a local action to run Terraform
+
+  deploy-user-dev:
+    runs-on: ubuntu-latest
+    env:
+      GENESYSCLOUD_OAUTHCLIENT_ID: ${{ secrets.GENESYSCLOUD_OAUTHCLIENT_ID_DEV }}
+      GENESYSCLOUD_OAUTHCLIENT_SECRET: ${{ secrets.GENESYSCLOUD_OAUTHCLIENT_SECRET_DEV }}
+      GENESYSCLOUD_API_REGION: "https://api.usw2.pure.cloud"
+      GENESYSCLOUD_REGION: "us-west-2"
+      GENESYSCLOUD_ARCHY_REGION: "usw2.pure.cloud"
+      TF_WORKSPACE: "Terra-POC-2"
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/genesys-cloud-dev-tools
+      - uses: hashicorp/setup-terraform@v1
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+      - uses: ./.github/actions/genesys-cloud-apply-terraform
+        with:
+          architect-flow-path: $GITHUB_WORKSPACE/blueprint/genesys-cloud-architect-flows/EmailComprehendFlow.yaml
+          architect-results-path: $GITHUB_WORKSPACE/output/results.json
+      - uses: ./.github/actions/genesys-cloud-create-email-domain-route
+
