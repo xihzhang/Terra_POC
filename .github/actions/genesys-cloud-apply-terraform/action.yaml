@@ -14,7 +14,8 @@ runs:
   steps:
     - run: |
         cd $GITHUB_WORKSPACE/blueprint/genesys-cloud-cx-as-code
-        terraform init 
+        terraform init
+        terraform plan
         terraform apply --auto-approve
         cd $GITHUB_WORKSPACE
       shell: bash
