@@ -33,8 +33,5 @@ jobs:
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
       - uses: ./.github/actions/genesys-cloud-apply-terraform
-        with:
-          architect-flow-path: $GITHUB_WORKSPACE/blueprint/genesys-cloud-architect-flows/EmailComprehendFlow.yaml
-          architect-results-path: $GITHUB_WORKSPACE/output/results.json
-      - uses: ./.github/actions/genesys-cloud-create-email-domain-route
+      - uses: ./.github/actions/genesys-cloud-user-add
 
